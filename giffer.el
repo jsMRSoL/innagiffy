@@ -1,7 +1,7 @@
 ;;; giffer.el --- Clip gifs from video files  -*- lexical-binding: t -*-
 
 (require 'sp-form-funcs)
-(require 'sp-utils)
+(require 'sp-buffer-utils)
 
 ;; setup initial window
 (defun img/dired-sp-convert-to-gif-windowed ()
