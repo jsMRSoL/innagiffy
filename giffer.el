@@ -27,15 +27,12 @@
     (txt/insert-sp-labelled-line lines "%-14s")
 
     ;; define fields
-    ;; (sp/define-field (sp/find-regex-bounds "bayer$") 'gif-dither-field gif-dither-field-keymap)
-    ;; (sp/define-field (sp/find-regex-bounds "15$") 'gif-fps-field gif-fps-field-keymap)
     (dolist (pair `(("bayer$" . (gif-dither-field . ,gif-dither-field-keymap))
 		    ("15$" . (gif-fps-field . ,gif-fps-field-keymap))))
       (let* ((rgx (car pair))
 	     (args (cdr pair))
 	     (field-sym (car args))
 	     (keymap (cdr args)))
-	(message "%S %S %S %S" rgx args field-sym keymap)
 	(sp/define-field
 	 (sp/find-regex-bounds rgx) field-sym keymap)))
 
@@ -119,58 +116,6 @@
     (start-process "convert-to-gif" "*ffmpeg conversion*" "bash" "-c" cmd)
     (kill-buffer-and-window)))
 
-
-;; (defun sp/define-field (bounds field-sym keymap)
-;;   "Make region START to END a field with RET keymap."
-;;   (let ((start (car bounds))
-;; 	(end   (cdr bounds)))
-;;     (put-text-property start end field-sym t)
-;;     (put-text-property start end 'keymap keymap)
-;;     (put-text-property start end 'read-only nil)
-;;     (put-text-property start end 'face 'highlight)))
-
-;; (defun sp/set-rgx-range-readonly (rgx)
-;;     (let* ((bounds (sp/find-regex-bounds rgx))
-;; 	   (start (car bounds))
-;; 	   (end (cdr bounds)))
-;;       (put-text-property start end 'read-only t)))
-
-;; (defun sp/get-field-bounds (field-sym)
-;;   "Return (START . END) of the field under point, or nil."
-;;   (interactive)
-;;   (let ((start (previous-single-property-change (point) field-sym))
-;;         (end (next-single-property-change (point) field-sym)))
-;;     (when (get-text-property (point) field-sym)
-;;       (cons (or start (point-min))
-;;             (or end (point-max))))))
-
-;; (defun sp/find-regex-bounds (regex &optional start end)
-;;   "Search for REGEX in the current buffer between START and END.
-;; Return a cons cell (START . END) of the first match, or nil if not found."
-;;   (save-excursion
-;;     (goto-char (or start (point-min)))
-;;     (when (re-search-forward regex end t)
-;;       (cons (match-beginning 0) (match-end 0)))))
-
-;; (defun txt/insert-sp-text-comment (txt)
-;;   "Insert text propertized with the `font-lock-comment-face'"
-;;   (insert (propertize txt 'face 'font-lock-comment-face)))
-
-;; (defun txt/insert-sp-labelled-line (elems fmt-str)
-;;   (dolist (pair elems)
-;;     (let ((key (car pair))
-;; 	  (value (cdr pair)))
-;;       (insert
-;;        (propertize (format fmt-str key) 'face 'font-lock-keyword-face)
-;;        (propertize value 'face 'font-lock-string-face)
-;;        "\n"))))
-
-;; (defun sp/collect-arg-from-buffer (prefix)
-;;   "Return the captured part of the first line starting with PREFIX, or nil."
-;;   (save-excursion
-;;     (goto-char (point-min))
-;;     (when (re-search-forward (concat "^" (regexp-quote prefix) "\\s-*\\(.*\\)$") nil t)
-;;       (match-string-no-properties 1))))
 
 (provide 'giffer)
 
